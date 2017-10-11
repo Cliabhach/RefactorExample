@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Refactor Example</string>
+
+    <string name="title_spring">Spring</string>
+    <string name="title_summer">Summer</string>
+    <string name="title_autumn">Autumn</string>
+    <string name="title_winter">Winter</string>
+
+    <string name="temp">Temperature</string>
+    <string name="temperature_label">Temperature outside right now: %s</string>
+
+</resources>
