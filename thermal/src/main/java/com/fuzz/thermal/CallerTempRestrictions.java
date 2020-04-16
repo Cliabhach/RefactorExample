@@ -15,6 +15,6 @@ import java.lang.annotation.RetentionPolicy;
  * @author Philip Cohn-Cort (Fuzz)
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Affinity {
+public @interface CallerTempRestrictions {
     Temperature value() default Temperature.MIDDLING;
 }

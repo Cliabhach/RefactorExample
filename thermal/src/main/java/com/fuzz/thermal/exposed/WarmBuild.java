@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 
-import com.fuzz.thermal.Affinity;
+import com.fuzz.thermal.CallerTempRestrictions;
 import com.fuzz.thermal.model.Temperature;
 import com.fuzz.thermal.model.WeirdThing;
 
@@ -18,7 +18,7 @@ public class WarmBuild extends Build implements WeirdThing {
     /**
      * Constructs a new, empty Build.
      */
-    @Affinity(Temperature.WARM)
+    @CallerTempRestrictions(Temperature.WARM)
     public WarmBuild() {
         super();
     }
@@ -28,7 +28,7 @@ public class WarmBuild extends Build implements WeirdThing {
      *
      * @return our favorite color (Sandy Brown!)
      */
-    @Affinity(Temperature.WARM)
+    @CallerTempRestrictions(Temperature.WARM)
     @ColorInt
     public int getFaveColor() {
         return Color.parseColor("#FFBF3C");

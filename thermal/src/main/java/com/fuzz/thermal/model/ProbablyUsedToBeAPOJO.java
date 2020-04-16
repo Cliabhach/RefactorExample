@@ -5,18 +5,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.fuzz.thermal.Affinity;
+import com.fuzz.thermal.CallerTempRestrictions;
 
 /**
  * This class was some simple, parcelable object in the past...it's doing a bit too much now, though.
  *
+ * TODO: ...yeah, but what kind of object?
+ *
  * @author Philip Cohn-Cort (Fuzz)
  */
 public class ProbablyUsedToBeAPOJO implements WeirdThing, Parcelable {
-
-    private int id;
-
-    private int uniqueId;
 
     @NonNull
     private String name = "orange";
@@ -30,17 +28,14 @@ public class ProbablyUsedToBeAPOJO implements WeirdThing, Parcelable {
         additionalData = Bundle.EMPTY;
     }
 
+
     protected ProbablyUsedToBeAPOJO(Parcel in) {
-        id = in.readInt();
-        uniqueId = in.readInt();
         name = in.readString();
         additionalData = in.readBundle();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(uniqueId);
         dest.writeString(name);
         dest.writeBundle(additionalData);
     }
@@ -48,26 +43,6 @@ public class ProbablyUsedToBeAPOJO implements WeirdThing, Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Affinity(Temperature.MIDDLING)
-    public String getName() {
-        String name = "black";
-        Bundle nameBundle = additionalData.getBundle("name");
-        if (nameBundle != null) {
-            name = nameBundle.getString("black");
-        }
-        return name;
-    }
-
-    @Affinity(Temperature.COOL)
-    public String getColor() {
-        String color = "blue";
-        Bundle colorBundle = additionalData.getBundle("name");
-        if (colorBundle != null) {
-            color = colorBundle.getString("blue");
-        }
-        return color;
     }
 
     public static final Creator<ProbablyUsedToBeAPOJO> CREATOR = new Creator<ProbablyUsedToBeAPOJO>() {
@@ -81,4 +56,29 @@ public class ProbablyUsedToBeAPOJO implements WeirdThing, Parcelable {
             return new ProbablyUsedToBeAPOJO[size];
         }
     };
+
+    private String getValue() {
+        String key = getName();
+        return map.get(key);
+    }
+
+    @CallerTempRestrictions(Temperature.MIDDLING)
+    public String getName() {
+        return getPropertyOverride("black");
+    }
+
+    @CallerTempRestrictions(Temperature.COOL)
+    public String getColor() {
+        return getPropertyOverride("blue");
+    }
+
+    private String getPropertyOverride(@NonNull String defaultColor) {
+        String name = defaultColor;
+        Bundle nameBundle = additionalData.getBundle("name");
+        if (nameBundle != null) {
+            name = nameBundle.getString(defaultColor);
+        }
+        return name;
+    }
+
 }

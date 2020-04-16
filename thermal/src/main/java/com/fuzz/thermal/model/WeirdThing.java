@@ -5,5 +5,6 @@ package com.fuzz.thermal.model;
  *
  * @author Philip Cohn-Cort (Fuzz)
  */
+@Deprecated
 public interface WeirdThing {
 }

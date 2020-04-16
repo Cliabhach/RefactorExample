@@ -11,9 +11,12 @@ import com.fuzz.thermal.model.Temperature;
  *     TODO: support setting current time?
  * </p>
  *
+ * TODO: why extend binder?
+ * TODO: convert to interface?
+ *
  * @author Philip Cohn-Cort (Fuzz)
  */
-public abstract class ColdManager extends Binder {
+public abstract class TemperatureProvider extends Binder {
 
     @NonNull
     public abstract Temperature getTemperature();

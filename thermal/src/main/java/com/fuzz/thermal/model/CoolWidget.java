@@ -2,18 +2,18 @@ package com.fuzz.thermal.model;
 
 import android.support.annotation.NonNull;
 
-import com.fuzz.thermal.Affinity;
+import com.fuzz.thermal.CallerTempRestrictions;
 
 /**
  * @author Philip Cohn-Cort (Fuzz)
  */
 public class CoolWidget implements WeirdThing {
 
-    @Affinity(Temperature.COOL)
+    @CallerTempRestrictions(Temperature.COOL)
     public CoolWidget() {
     }
 
-    @Affinity(Temperature.COOL)
+    @CallerTempRestrictions(Temperature.COOL)
     @NonNull
     public String getId() {
         return "green";

@@ -2,14 +2,14 @@ package com.fuzz.thermal.model;
 
 import android.support.annotation.NonNull;
 
-import com.fuzz.thermal.Affinity;
+import com.fuzz.thermal.CallerTempRestrictions;
 
 /**
  * @author Philip Cohn-Cort (Fuzz)
  */
-public class WarmWidget implements WeirdThing {
+public class WarmWidget implements WarmThing, WeirdThing {
 
-    @Affinity(Temperature.WARM)
+    @CallerTempRestrictions(Temperature.WARM)
     public WarmWidget() {
     }
 

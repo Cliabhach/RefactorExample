@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.BundleCompat;
 
-import com.fuzz.thermal.exposed.HotBuild;
 import com.fuzz.thermal.exposed.WarmBuild;
-import com.fuzz.thermal.model.HotWidget;
 import com.fuzz.thermal.model.ProbablyUsedToBeAPOJO;
 import com.fuzz.thermal.model.Temperature;
 import com.fuzz.thermal.model.WarmWidget;
@@ -22,38 +20,13 @@ import com.fuzz.thermal.util.DefinitelyNotHelpful;
  */
 public final class TerribleFactory {
 
-    @Affinity(Temperature.COLD)
-    @Nullable
-    public static final WeirdThing makenew() {
-        return null;
-    }
-
-    @Affinity(Temperature.COOL)
-    public static final WeirdThing makenEw() {
+    @CallerTempRestrictions(Temperature.COOL)
+    public static final WeirdThing newCoolObject() {
         return new ProbablyUsedToBeAPOJO();
     }
 
-    @Affinity(Temperature.MIDDLING)
-    @Nullable
-    public static final WeirdThing makeNew() {
-        if (DefinitelyNotHelpful.isActive()) {
-            return null;
-        } else {
-            return new ProbablyUsedToBeAPOJO();
-        }
-    }
-
-    @Affinity(Temperature.HOT)
-    public static final WeirdThing MaKenew(@NonNull Context context, @Nullable BundleCompat bundle) {
-        if (DefinitelyNotHelpful.allowsBundles(context)) {
-            return new HotBuild();
-        } else {
-            return new HotWidget();
-        }
-    }
-
-    @Affinity(Temperature.WARM)
-    public static final WeirdThing MaKEnew(@NonNull Context context, @Nullable BundleCompat bundle) {
+    @CallerTempRestrictions(Temperature.WARM)
+    public static final WeirdThing newWarmObject(@NonNull Context context, @Nullable BundleCompat bundle) {
         if (DefinitelyNotHelpful.allowsBundles(context)) {
             return new WarmBuild();
         } else {

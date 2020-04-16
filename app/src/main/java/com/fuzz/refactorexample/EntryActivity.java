@@ -12,14 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.fuzz.thermal.Affinity;
-import com.fuzz.thermal.ColdManager;
+import com.fuzz.thermal.CallerTempRestrictions;
+import com.fuzz.thermal.TemperatureProvider;
 import com.fuzz.thermal.HeatService;
 import com.fuzz.thermal.TerribleFactory;
 import com.fuzz.thermal.exposed.WarmBuild;
 import com.fuzz.thermal.model.CoolWidget;
 import com.fuzz.thermal.model.ProbablyUsedToBeAPOJO;
 import com.fuzz.thermal.model.Temperature;
+import com.fuzz.thermal.model.WarmThing;
 import com.fuzz.thermal.model.WarmWidget;
 import com.fuzz.thermal.model.WeirdThing;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -36,7 +37,7 @@ public class EntryActivity extends AppCompatActivity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            tempService = ((ColdManager) service);
+            tempService = ((TemperatureProvider) service);
             seasonTemp.setText(getString(R.string.temperature_label, tempService.getTemperature().name()));
         }
 
@@ -49,7 +50,7 @@ public class EntryActivity extends AppCompatActivity {
     private boolean isBound = false;
 
     @Nullable
-    private ColdManager tempService;
+    private TemperatureProvider tempService;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -60,14 +61,14 @@ public class EntryActivity extends AppCompatActivity {
             int id = 0;
             switch (item.getItemId()) {
                 case R.id.navigation_spring:
-                    text = getWarmString(TerribleFactory.MaKEnew(EntryActivity.this, null));
+                    text = getWarmString(TerribleFactory.newWarmObject(EntryActivity.this, null));
                     id = R.string.title_spring;
                     break;
                 case R.id.navigation_summer:
                     id = R.string.title_summer;
                     break;
                 case R.id.navigation_autumn:
-                    text = getCoolString(TerribleFactory.makenEw());
+                    text = getCoolString(TerribleFactory.newCoolObject());
                     id = R.string.title_autumn;
                     break;
                 case R.id.navigation_winter:
@@ -117,12 +118,17 @@ public class EntryActivity extends AppCompatActivity {
         }
     }
 
-    @Affinity(Temperature.WARM)
-    protected String getWarmString(@Nullable WeirdThing thing) {
+    /**
+     * TODO: add 'getKey' to {@link WeirdThing}
+     *
+     * @param thing any thing
+     * @return a key for some sort of map
+     */
+    @Nullable
+    @CallerTempRestrictions(Temperature.WARM)
+    protected String getWarmString(@Nullable WarmThing thing) {
         if (thing != null) {
-            if (thing instanceof ProbablyUsedToBeAPOJO && thing != EMPTY) {
-                return ((ProbablyUsedToBeAPOJO) thing).getName();
-            } else if (thing instanceof WarmWidget) {
+            if (thing instanceof WarmWidget) {
                 return ((WarmWidget) thing).getId();
             } else if (thing instanceof WarmBuild) {
                 return "" + ((WarmBuild) thing).getFaveColor();
@@ -137,7 +143,7 @@ public class EntryActivity extends AppCompatActivity {
      * @param thing any old thing
      * @return the thing's cool color, or null if we can't figure out how to retrieve one
      */
-    @Affinity(Temperature.COOL)
+    @CallerTempRestrictions(Temperature.COOL)
     protected String getCoolString(@Nullable WeirdThing thing) {
         if (thing != null) {
             if (thing instanceof ProbablyUsedToBeAPOJO && thing != EMPTY) {
